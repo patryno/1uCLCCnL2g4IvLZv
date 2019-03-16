@@ -57,9 +57,9 @@ class Person
     private $skin;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
-    private $homeworld = [];
+    private $homeworld;
 
     /**
      * @ORM\Column(type="array", nullable=true)
@@ -95,6 +95,26 @@ class Person
      * @ORM\Column(type="string", length=255)
      */
     private $url;
+
+    public function __construct(array $result)
+    {
+        $this->name = $result['name'];
+        $this->birth = $result['birth_year'];
+        $this->eye = $result['eye_color'];
+        $this->gender = $result['gender'];
+        $this->hair = $result['hair_color'];
+        $this->height = $result['height'];
+        $this->mass = $result['mass'];
+        $this->skin = $result['skin_color'];
+        $this->homeworld = $result['homeworld'];
+        $this->films = $result['films'];
+        $this->species = $result['species'];
+        $this->starship = $result['starships'];
+        $this->vehicles = $result['vehicles'];
+        $this->created =  new \DateTime($result['created']);
+        $this->edited = new \DateTime($result['edited']);
+        $this->url = $result['url'];
+    }
 
     public function getId(): ?int
     {
@@ -197,12 +217,12 @@ class Person
         return $this;
     }
 
-    public function getHomeworld(): ?array
+    public function getHomeworld(): ?string
     {
         return $this->homeworld;
     }
 
-    public function setHomeworld(?array $homeworld): self
+    public function setHomeworld(string $homeworld): self
     {
         $this->homeworld = $homeworld;
 
