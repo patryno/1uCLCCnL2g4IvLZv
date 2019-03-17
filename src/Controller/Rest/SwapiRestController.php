@@ -13,25 +13,25 @@ class SwapiRestController extends AbstractFOSRestController
 {
     /**
      * Retrieves all information about Person
-     * @Rest\Get("/articles/{articleId}")
+     * @Rest\Get("/people/{personName}")
      * @throws EntityNotFoundException
      */
-    public function getArticle(int $articleId): View
+    public function getPerson(string $personName): View
     {
-        $product = $this->getDoctrine()->getRepository(Person::class)->find($articleId);
-        if (!$product) {
-            throw new EntityNotFoundException('Article with id '.$articleId.' does not exist!');
+        $person = $this->getDoctrine()->getRepository(Person::class)->findByName($personName);
+        if (!$person) {
+            throw new EntityNotFoundException('person with name '.$personName.' does not exist!');
         }
-        return View::create($product, Response::HTTP_OK);
+        return View::create($person, Response::HTTP_OK);
     }
 
     /**
-     * Retrieves all Persons
-     * @Rest\Get("/articles")
+     * Retrieves all People
+     * @Rest\Get("/people")
      */
-    public function getArticles(): View
+    public function getPeople(): View
     {
-        $products = $this->getDoctrine()->getRepository(Person::class)->findAll();
-        return View::create($products, Response::HTTP_OK);
+        $people = $this->getDoctrine()->getRepository(Person::class)->findAll();
+        return View::create($people, Response::HTTP_OK);
     }
 }
