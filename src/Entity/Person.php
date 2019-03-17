@@ -96,6 +96,11 @@ class Person
      */
     private $url;
 
+    /**
+     * Person constructor.
+     * @param array $result contains result array from swapi
+     * @throws \Exception
+     */
     public function __construct(array $result)
     {
         $this->name = $result['name'];

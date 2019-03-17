@@ -32,30 +32,26 @@ class SwapiImportDataCommand extends Command
             ->addOption('option1', null, InputOption::VALUE_NONE, 'None');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     * @throws \Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('recordsNumber');
-        $io->success($arg1);
-        $entityManager = $this->container->get('doctrine')->getManager();
-        $i = 1;
-        while ($arg1 > 0) {
-            $record = (new SwapiService())->takeRecords($i);
-            $entityManager->persist($record);
-            $arg1--;
-            $i++;
+        $recordsNumber = $input->getArgument('recordsNumber');
+        if($recordsNumber) {
+            $io->success($recordsNumber);
+        } else {
+            $io->error('Please set number of records to import');
+            return;
         }
-        $entityManager->flush();
-        //$io->success($record['name']);
+        $objectManager = $this->container->get('doctrine')->getManager();
+        (new SwapiService())->importRecords($recordsNumber, $objectManager);
 
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
-        }
 
-        if ($input->getOption('option1')) {
-            // ...
-        }
-
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('Records are imported');
     }
 }
